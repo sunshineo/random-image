@@ -6,7 +6,7 @@ First clone this project
 ```
 https://github.com/sunshineo/random-image
 ```
-Build the plugin
+Build the plugin. I am using node v16.15.1 (npm v9.4.0). Other versions may also work.
 ```
 cd random-image/chrome-react-extension
 npm insall
