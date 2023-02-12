@@ -41,9 +41,10 @@ It uses a library called [text2png](https://www.npmjs.com/package/text2png) to c
 
 It currently returning the images as a JSON array with base64 encoded strings as the images. This is not efficient and may not work if the images get larger. We can improve this by use `application/octet-stream` or more likely `multipart/form-data` so we can attach metadata.
 
-I created a `Dockerfile` for the service that can be used to create a docker image for the backend service. Assuming docker is running, one can run the following to build under the `service` folder
+I created a `Dockerfile` for the service that can be used to create a docker image for the backend service. Assuming docker is running, one can run the following to build under the `service` folder, then run.
 ```
 docker build -t random-image-service .
+docker run -it --rm -p 3000:3000 random-image-service
 ```
 With a docker image, this service can be deployed to any major cloud provider and even a multi cloud k8s cluster.
 
