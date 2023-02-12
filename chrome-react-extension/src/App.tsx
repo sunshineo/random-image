@@ -40,23 +40,9 @@ function App() {
 
   return (
     <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
       {images.map((image, index) => 
         <div style={{margin: 20}}>
-          <img src ={`data:image/png;base64,${image}`} />
+          <img src ={`data:image/png;base64,${image}`} alt='number'/>
           <button style={{marginLeft: 20}} onClick={() => copy(index)}>Copy to clipboard</button>
         </div>
       )}
