@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 import './App.css';
 
 const b64toBlob = (b64Data: any, contentType='', sliceSize=512) => {
@@ -22,16 +22,27 @@ const b64toBlob = (b64Data: any, contentType='', sliceSize=512) => {
   return blob;
 }
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
 function App() {
   const [images, setImages] = useState([])
 
-  const fetchImages = async () => {
-    const response = await fetch('http://localhost:3000/')
-    setImages(await response.json())
-  }
-  useEffect(() => {
-    fetchImages()
-  }, [])
+  const { sendMessage, lastMessage, readyState } = useWebSocket('ws://localhost:3000', {
+    onOpen: async () => {
+      while (true) {
+        if (readyState !== ReadyState.CONNECTING && readyState !== ReadyState.OPEN) {
+          break;
+        }
+        sendMessage('');
+        await sleep(10000);
+      }
+    },
+    onMessage: event => {
+      setImages(JSON.parse(event.data));
+    },
+    retryOnError: true,
+  });
+
   const copy = (index: number) => {
     navigator.clipboard.write([
       new ClipboardItem({ 'image/png': b64toBlob(images[index], 'image/png')})
@@ -46,7 +57,6 @@ function App() {
           <button style={{marginLeft: 20}} onClick={() => copy(index)}>Copy to clipboard</button>
         </div>
       )}
-      <button onClick={fetchImages}>Refresh</button>
     </div>
   );
 }
